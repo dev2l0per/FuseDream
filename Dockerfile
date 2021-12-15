@@ -1,7 +1,7 @@
-FROM pytorch/pytorch:1.9.0-cuda10.2-cudnn7-runtime
-# FROM python:3.8
+# FROM pytorch/pytorch:1.9.0-cuda10.2-cudnn7-runtime
+FROM legosz/my-fusedream:v1
 WORKDIR /app
-COPY . .
+# COPY . .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
