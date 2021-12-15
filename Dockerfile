@@ -2,6 +2,7 @@
 FROM legosz/my-fusedream:v1
 WORKDIR /app
 # COPY . .
+RUN apt-get update && apt-get install -y git
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install git+https://github.com/openai/CLIP.git
