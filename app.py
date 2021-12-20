@@ -45,17 +45,17 @@ def generate_fusedream():
   try:
     params = request.get_json()
     sentence = params['sentence']
-    init_iters = params['init_iters']
-    opt_iters = params['opt_iters']
-    num_basis = params['num_basis']
+    init_iters = int(params['init_iters'])
+    opt_iters = int(params['opt_iters'])
+    num_basis = int(params['num_basis'])
     model = params['model']
-    seed = params['seed']
+    seed = int(params['seed'])
   except Exception:
     return Response("Empty Field", status=400)
   
   res_file = generate(sentence, init_iters, opt_iters, num_basis, model, seed)
 
-  return send_file(res_file, nunetyoe="image/png")
+  return send_file(res_file, mimetype="image/png")
 
 @app.route('/health', methods=['GET'])
 def health_check():
