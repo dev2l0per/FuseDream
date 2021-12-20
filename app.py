@@ -1,5 +1,5 @@
 from flask import (
-  Flask, request, Response,
+  Flask, request, Response, send_file
 )
 
 import torch
@@ -31,13 +31,14 @@ def generate(sentence, init_iters, opt_iters, num_basis, model, seed):
   z_cllt_save = torch.cat(z_cllt).cpu().numpy()
   y_cllt_save = torch.cat(y_cllt).cpu().numpy()
   img, z, y = generator.optimize_clip_score(z_cllt, y_cllt, sentence, latent_noise=False, augment=True, opt_iters=opt_iters, optimize_y=True)
-  score = generator.measureAugCLIP(z, y, sentence, augment=True, num_smaples=20)
+  score = generator.measureAugCLIP(z, y, sentence, augment=True, num_samples=20)
   print('AugCLIP score: ', score)
   import os
   if not os.path.exists('./samples'):
     os.mkdir('./samples')
   save_image(img, './samples/fusedream_%s_seed_%d_score_%.4f.png'%(sentence, seed, score))
   
+  return './samples/fusedream_%s_seed_%d_score_%.4f.png'%(sentence, seed, score)
 
 @app.route('/fusedream', methods=['POST'])
 def generate_fusedream():
@@ -52,7 +53,9 @@ def generate_fusedream():
   except Exception:
     return Response("Empty Field", status=400)
   
-  generate(sentence, init_iters, opt_iters, num_basis, model, seed)
+  res_file = generate(sentence, init_iters, opt_iters, num_basis, model, seed)
+
+  return send_file(res_file, nunetyoe="image/png")
 
 @app.route('/health', methods=['GET'])
 def health_check():
