@@ -7,4 +7,4 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install git+https://github.com/openai/CLIP.git
 EXPOSE 5000
-CMD ["python", "app.py", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["flask", "run", "--host", "0.0.0.0", "--port", "5000"]
